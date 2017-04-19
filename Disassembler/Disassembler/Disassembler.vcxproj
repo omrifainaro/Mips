@@ -139,6 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2017\Projects\Disassembler\Disassembler\Instruction.c" />
+    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2017\Projects\Disassembler\Disassembler\Main.c" />
+    <ClCompile Include="..\..\..\..\..\Documents\Visual Studio 2017\Projects\Disassembler\Disassembler\Utils.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Documents\Visual Studio 2017\Projects\Disassembler\Disassembler\constants.h" />
+    <ClInclude Include="..\..\..\..\..\Documents\Visual Studio 2017\Projects\Disassembler\Disassembler\Instruction.h" />
+    <ClInclude Include="..\..\..\..\..\Documents\Visual Studio 2017\Projects\Disassembler\Disassembler\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
