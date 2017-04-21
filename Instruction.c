@@ -12,13 +12,13 @@ INSTRUCTION* newInstruction(unsigned int opcode) {
 	if (f == R_FORMAT) {
 		inst->body.R.func = opcode & 0x3f;
 		inst->body.R.shift = (opcode >> 6) & 0x1f;
-		inst->body.R.rd = (opcode >> 11) & 0x1f;
+		inst->body.R.rs = (opcode >> 11) & 0x1f;
 		inst->body.R.rt = (opcode >> 16) & 0x1f;
-		inst->body.R.rs= (opcode >> 21) & 0x1f;
+		inst->body.R.rd = (opcode >> 21) & 0x1f;
 	}
 	else if (f == I_FORMAT){
 		inst->body.I.imm = opcode & 0xffff;
-		inst->body.I.rt = (opcode >> 16) & 0x1f;
+		inst->body.I.rs = (opcode >> 16) & 0x1f;
 		inst->body.I.rt = (opcode >> 21) & 0x1f;
 	}
 	else if (f == J_FORMAT) {
@@ -27,198 +27,163 @@ INSTRUCTION* newInstruction(unsigned int opcode) {
 	return inst;
 }
 
+int getRegister(unsigned char val);
+
 void printInstruction(INSTRUCTION* inst) {
 	if (inst->type == R_FORMAT) {
-		printf("%s %x, %x, %x\n", getRInsructionName(inst), inst->body.R.rs, inst->body.R.rt,
-			inst->body.R.rd);
+		printf("%s t%d, t%d, t%d\n", getRInsructionName(inst), getRegister(inst->body.R.rs), 
+			getRegister(inst->body.R.rd), getRegister(inst->body.R.rt));
 	}
 	else if (inst->type == I_FORMAT) {
-		printf("%s %x, %x, %x\n", getIJInstructionName(inst->op.ijop, &inst->type), inst->body.I.rs, inst->body.I.rt, inst->body.I.imm);
+		printf("%s t%d, t%d, %x\n", getIJInstructionName(inst->op.ijop, &inst->type), getRegister(inst->body.I.rs), 
+			getRegister(inst->body.I.rt), inst->body.I.imm);
 	}
 	else if (inst->type == J_FORMAT) {
-		printf("%s %x\n", getIJInstructionName(inst->op.ijop, &inst->type), inst->body.J.addr);
+		printf("%s 0x%x\n", getIJInstructionName(inst->op.ijop, &inst->type), inst->body.J.addr);
 	}
 }
 
-char* getIJInstructionName(char op, format* f) {
-	switch (absoluteVal(op))
+char* getIJInstructionName(unsigned char op, format* f) {
+	switch (op)
 	{
 	case BNE:
 		*f = I_FORMAT;
-		return "BNE\0";
-		break;
+		return "BNE";
 	case BEQ:
 		*f = I_FORMAT;
-		return "BEQ\0";
-		break;
+		return "BEQ";
 	case SB:
 		*f = I_FORMAT;
-		return "SB\0";
-		break;
+		return "SB";
 	case SH:
 		*f = I_FORMAT;
-		return "SH\0";
-		break;
+		return "SH";
 	case SW:
 		*f = I_FORMAT;
-		return "SW\0";
-		break;
+		return "SW";
 	case LB:
 		*f = I_FORMAT;
-		return "LB\0";
-		break;
+		return "LB";
 	case LBU:
 		*f = I_FORMAT;
-		return "LBU\0";
-		break;
+		return "LBU";
 	case LH:
 		*f = I_FORMAT;
-		return "LH\0";
-		break;
+		return "LH";
 	case LHU:
 		*f = I_FORMAT;
-		return "LHU\0";
-		break;
+		return "LHU";
 	case LW:
 		*f = I_FORMAT;
-		return "LW\0";
-		break;
+		return "LW";
 	case J:
 		*f = J_FORMAT;
-		return "J\0";
-		break;
+		return "J";
 	case JAL:
 		*f = J_FORMAT;
-		return "JAL\0";
-		break;
+		return "JAL";
 	//case JALR:
 	//	break;
 	case LHI:
 		*f = I_FORMAT;
-		return "LHI\0";
-		break;
+		return "LHI";
 	case ORI:
 		*f = I_FORMAT;
-		return "ORI\0";
-		break;
+		return "ORI";
 	case ADDI:
 		*f = I_FORMAT;
-		return "ADDI\0";
-		break;
+		return "ADDI";
 	case ADDIU:
 		*f = I_FORMAT;
-		return "ADDIU\0";
-		break;
+		return "ADDIU";
 	case ANDI:
 		*f = I_FORMAT;
-		return "ANDI\0";
-		break;
+		return "ANDI";
 	case XORI:
 		*f = I_FORMAT;
-		return "XORI\0";
-		break;
+		return "XORI";
 	case SLTI:
 		*f = I_FORMAT;
-		return "SLTI\0";
-		break;
+		return "SLTI";
 	case MFHI:
 		*f = I_FORMAT;
-		return "MFHI\0";
-		break;
+		return "MFHI";
 	//case SLTIU:
 	//	break;
 	case MTHI:
 		*f = I_FORMAT;
-		return "MTHI\0";
-		break;
+		return "MTHI";
 	default:
 		*f = R_FORMAT;
-		return "NULL\0";
-		break;
+		return "NULL";
 	}
 }
 
 char* getRInsructionName(INSTRUCTION* inst) {
-	switch (absoluteVal(inst->body.R.func)) {
+	switch (inst->body.R.func) {
 	case ADD:
-		return "ADD\0";
-		break;
+		return "ADD";
 	case ADDU:
-		return "ADDU\0";
-		break;
+		return "ADDU";
 	case AND:
-		return "AND\0";
-		break;
+		return "AND";
 	case DIV:
-		return "DIV\0";
+		return "DIV";
 		break;
 	case DIVU:
-		return "DIVU\0";
-		break;
+		return "DIVU";
 	case MULT:
-		return "MULT\0";
-		break;
+		return "MULT";
 	case MULTU:
-		return "MULTU\0";
-		break;
+		return "MULTU";
 	case NOR:
-		return "NOR\0";
-		break;
+		return "NOR";
 	case OR:
-		return "OR\0";
-		break;
+		return "OR";
 	case SLL:
-		return "SLL\0";
-		break;
+		return "SLL";
 	case SLLV:
-		return "SLV\0";
-		break;
+		return "SLV";
 	case SRA:
-		return "SRA\0";
-		break;
+		return "SRA";
 	case SRAV:
-		return "SRAV\0";
-		break;
+		return "SRAV";
 	case SRL:
-		return "SRL\0";
-		break;
+		return "SRL";
 	case SRLV:
-		return "SRLV\0";
-		break;
+		return "SRLV";
 	case SUB:
-		return "SUB\0";
-		break;
+		return "SUB";
 	case SUBU:
-		return "SUBU\0";
-		break;
+		return "SUBU";
 	case XOR:
-		return "XOR\0";
-		break;
+		return "XOR";
 	//case LLO:
 	//	break;
 	case SLT:
-		return "SLT\0";
-		break;
+		return "SLT";
 	case SLTU:
-		return "SLTU\0";
-		break;
+		return "SLTU";
 	//case BGTZ: dont know yet what to do
 	//	break;   these instructions are real
 	//case BLEZ:
 	//	break;
 	case MFLO:
-		return "MFLO\0";
-		break;
+		return "MFLO";
 	case MTLO:
-		return "MTLO\0";
-		break;
+		return "MTLO";
 	//case TRAP:
 	//	break;
 	case JR:
-		return "JR\0";
-		break;
+		return "JR";
 	default:
-		return "NULL\0";
-		break;
+		return "NULL";
 	}
+}
+
+int getRegister(unsigned char val) {
+	if (val > 15) {
+		return val - 16;
+	}
+	return val - 8;
 }

@@ -5,7 +5,7 @@ void pause();
 
 int main() {
 	INSTRUCTION* inst;
-	inst = newInstruction(0x014B4820);
+	inst = newInstruction(0x01384020);
 	printInstruction(inst);
 	inst = newInstruction(0x08002FFF);
 	printInstruction(inst);
@@ -13,6 +13,7 @@ int main() {
 	printInstruction(inst);
 	inst = newInstruction(0xc52A5A0);
 	printInstruction(inst);
+	free(inst);
 	pause();
 	return 0;
 }

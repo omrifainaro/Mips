@@ -1,10 +1,9 @@
 #ifndef  UTILS_H
 #define UTILS_H
 
-#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-int getLength(char* string);
-int isIFormat(char* string);
-int absoluteVal(int num);
+char* getRegister(unsigned char reg);
 
 #endif
