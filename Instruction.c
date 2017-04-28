@@ -27,16 +27,14 @@ INSTRUCTION* newInstruction(unsigned int opcode) {
 	return inst;
 }
 
-int getRegister(unsigned char val);
-
 void printInstruction(INSTRUCTION* inst) {
 	if (inst->type == R_FORMAT) {
-		printf("%s t%d, t%d, t%d\n", getRInsructionName(inst), getRegister(inst->body.R.rs), 
-			getRegister(inst->body.R.rd), getRegister(inst->body.R.rt));
+		printf("%s %s, %s, %s\n", getRInsructionName(inst), REGISTER_NAMES[inst->body.R.rs],
+			REGISTER_NAMES[inst->body.R.rd], REGISTER_NAMES[inst->body.R.rt]);
 	}
 	else if (inst->type == I_FORMAT) {
-		printf("%s t%d, t%d, %x\n", getIJInstructionName(inst->op.ijop, &inst->type), getRegister(inst->body.I.rs), 
-			getRegister(inst->body.I.rt), inst->body.I.imm);
+		printf("%s %s, %s, 0x%x\n", getIJInstructionName(inst->op.ijop, &inst->type), REGISTER_NAMES[inst->body.I.rs],
+			REGISTER_NAMES[inst->body.I.rt], inst->body.I.imm);
 	}
 	else if (inst->type == J_FORMAT) {
 		printf("%s 0x%x\n", getIJInstructionName(inst->op.ijop, &inst->type), inst->body.J.addr);
@@ -179,11 +177,4 @@ char* getRInsructionName(INSTRUCTION* inst) {
 	default:
 		return "NULL";
 	}
-}
-
-int getRegister(unsigned char val) {
-	if (val > 15) {
-		return val - 16;
-	}
-	return val - 8;
 }
